@@ -64,14 +64,29 @@ class EDA:
             plt.show()
 
     # Bivariate or Multivariate Analysis
-    def plot_correlation_matrix(self):
+    def plot_correlation_matrix(self, col1: str, col2: str):
         """
-        Plots a heatmap showing the correlation matrix of numerical columns in the DataFrame.
+        Plots a heatmap showing the correlation between two specified numerical columns.
+
+        Parameters:
+        col1 (str): The name of the first column.
+        col2 (str): The name of the second column.
         """
-        plt.figure(figsize=(10, 8))
-        correlation_matrix = self.data.corr()
+        # Ensure the columns are in the DataFrame
+        if col1 not in self.data.columns or col2 not in self.data.columns:
+            print(f"One or both columns '{col1}' and '{col2}' are not present in the DataFrame.")
+            return
+
+        # Create a DataFrame containing only the specified columns
+        subset = self.data[[col1, col2]]
+        
+        # Calculate the correlation matrix for the two columns
+        correlation_matrix = subset.corr()
+
+        # Plot the heatmap
+        plt.figure(figsize=(5, 4))
         sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', linewidths=0.5)
-        plt.title('Correlation Matrix')
+        plt.title(f'Correlation Matrix: {col1} and {col2}')
         plt.show()
 
     def scatter_plot(self, x_column: str, y_column: str, hue_column: str = None):
